@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: autoplanner
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/autoplanner
+    username: dasha
+    password: 483711
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: my-super-secret-key
+  expiration: 3600000
+logging:
+  level:
+    org.springframework.security: DEBUG
