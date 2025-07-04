@@ -1,5 +1,6 @@
 package ru.neoflex.autoplanner.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,7 @@ public class User {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Vehicle> vehicles;
 
     @OneToMany(mappedBy = "user")
