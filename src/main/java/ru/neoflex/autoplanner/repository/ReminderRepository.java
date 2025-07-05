@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ReminderRepository extends JpaRepository<Reminder, Long> {
-    List<Reminder> findByUserId(Long userId);
+    List<Reminder> findAllByUserId(Long userId);
     List<Reminder> findByVehicleId(Long vehicleId);
     List<Reminder> findByIsSentFalseAndRemindDateBefore(LocalDateTime date);
 }
