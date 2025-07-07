@@ -13,7 +13,7 @@ import lombok.*;
 public class ServiceCenterRepairType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "service_center_id", nullable = false)
