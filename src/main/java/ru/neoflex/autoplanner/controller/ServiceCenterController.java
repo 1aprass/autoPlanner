@@ -1,5 +1,6 @@
 package ru.neoflex.autoplanner.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -18,48 +19,37 @@ public class ServiceCenterController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDto<ServiceCenterResponseDto>> getById(@PathVariable Long id) {
-        try {
-            var result = service.getById(id);
-            return ResponseEntity.ok(ApiResponseDto.success(result));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponseDto.error(e.getMessage()));
-        }
+
+        var result = service.getById(id);
+        return ResponseEntity.ok(ApiResponseDto.success(result));
+
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseDto<ServiceCenterResponseDto>> create(@RequestBody ServiceCenterRequestDto dto) {
-        try {
-            var result = service.create(dto);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponseDto.success("Service center added successfully", result));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<ServiceCenterResponseDto>> create(
+            @Valid @RequestBody ServiceCenterRequestDto dto) {
+
+        var result = service.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseDto.success("Service center added successfully", result));
+
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseDto<ServiceCenterResponseDto>> update(
+            @Valid
             @PathVariable Long id,
             @RequestBody ServiceCenterUpdateRequestDto dto) {
-        try {
-            var result = service.update(id, dto);
-            return ResponseEntity.ok(ApiResponseDto.success("Service center updated successfully", result));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponseDto.error(e.getMessage()));
-        }
+        var result = service.update(id, dto);
+        return ResponseEntity.ok(ApiResponseDto.success("Service center updated successfully", result));
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> delete(@PathVariable Long id) {
-        try {
-            service.delete(id);
-            return ResponseEntity.ok(ApiResponseDto.success("Service center deleted successfully", null));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<String>> delete(@PathVariable Long id) {
+
+        service.delete(id);
+        return ResponseEntity.ok(ApiResponseDto.success("Service center deleted successfully"));
+
     }
 }

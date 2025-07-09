@@ -1,5 +1,7 @@
 package ru.neoflex.autoplanner.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -13,57 +15,46 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/api/v1/appointment_requests")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/appointment_requests")
 public class AppointmentRequestController {
 
     private final AppointmentRequestService service;
 
     @GetMapping
-    public ResponseEntity<?> getByUserId(@RequestParam(name = "user_id") Long userId) {
-        try {
-            List<AppointmentRequestResponseDto> result = service.getByUserId(userId);
-            return ResponseEntity.ok(ApiResponseDto.success(result));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(ApiResponseDto.error(e.getMessage()));
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<List<AppointmentRequestResponseDto>>> getByUserId(
+            @RequestParam(name = "user_id") @NotNull Long userId) {
+
+        List<AppointmentRequestResponseDto> result = service.getByUserId(userId);
+        return ResponseEntity.ok(ApiResponseDto.success(result));
+
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AppointmentRequestRequestDto dto) {
-        try {
-            var result = service.create(dto);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponseDto.success("Appointment request created successfully", result));
-        } catch (NoSuchElementException | IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.error("Invalid input"));
-        }
+    public ResponseEntity<ApiResponseDto<AppointmentRequestResponseDto>> create(
+            @Valid @RequestBody AppointmentRequestRequestDto dto) {
+
+        AppointmentRequestResponseDto result = service.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseDto.success("Appointment request created successfully", result));
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id,
+    public ResponseEntity<ApiResponseDto<AppointmentRequestResponseDto>> update(@Valid @PathVariable Long id,
                                     @RequestBody AppointmentRequestUpdateDto dto) {
-        try {
-            var result = service.update(id, dto);
-            return ResponseEntity.ok(ApiResponseDto.success("Appointment request updated successfully", result));
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.error("Invalid input"));
-        }
+
+        AppointmentRequestResponseDto result = service.update(id, dto);
+        return ResponseEntity.ok(ApiResponseDto
+                .success("Appointment request updated successfully", result));
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        try {
+    public ResponseEntity<ApiResponseDto<String>> delete(@PathVariable Long id) {
+
             service.delete(id);
-            return ResponseEntity.ok(ApiResponseDto.success("Appointment request deleted successfully"));
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.getMessage()));
-        }
+            return ResponseEntity.ok(ApiResponseDto
+                    .success("Appointment request deleted successfully"));
     }
 }

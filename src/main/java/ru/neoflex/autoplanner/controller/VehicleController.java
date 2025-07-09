@@ -1,5 +1,7 @@
 package ru.neoflex.autoplanner.controller;
 
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,50 +13,43 @@ import ru.neoflex.autoplanner.service.VehicleService;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/vehicles")
 public class VehicleController {
 
-    @Autowired
-    private VehicleService vehicleService;
+    private final VehicleService vehicleService;
 
     @PostMapping
-    public ResponseEntity<?> createVehicle(@RequestBody VehicleCreateRequestDto dto) {
-        try {
-            VehicleResponseDto response = vehicleService.createVehicle(dto);
-            return ResponseEntity.status(201)
-                    .body(ApiResponseDto.success("Vehicle created successfully", response));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<VehicleResponseDto>> createVehicle(@Valid @RequestBody VehicleCreateRequestDto dto) {
+
+        VehicleResponseDto response = vehicleService.createVehicle(dto);
+        return ResponseEntity.status(201)
+                .body(ApiResponseDto.success("Vehicle created successfully", response));
+
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getVehicle(@PathVariable Long id) {
-        try {
-            VehicleResponseDto response = vehicleService.getVehicle(id);
-            return ResponseEntity.ok(ApiResponseDto.success(response));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<VehicleResponseDto>> getVehicle(@Valid @PathVariable Long id) {
+
+        VehicleResponseDto response = vehicleService.getVehicle(id);
+        return ResponseEntity.ok(ApiResponseDto.success(response));
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateVehicle(@PathVariable Long id, @RequestBody VehicleUpdateRequestDto dto) {
-        try {
-            VehicleResponseDto response = vehicleService.updateVehicle(id, dto);
-            return ResponseEntity.ok(ApiResponseDto.success("Vehicle updated successfully", response));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<VehicleResponseDto>> updateVehicle(
+            @Valid @PathVariable Long id, @RequestBody VehicleUpdateRequestDto dto) {
+
+        VehicleResponseDto response = vehicleService.updateVehicle(id, dto);
+        return ResponseEntity.ok(ApiResponseDto.success("Vehicle updated successfully", response));
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteVehicle(@PathVariable Long id) {
-        try {
-            vehicleService.deleteVehicle(id);
-            return ResponseEntity.ok(ApiResponseDto.success("Vehicle deleted successfully", null));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<String>> deleteVehicle(@PathVariable Long id) {
+
+        vehicleService.deleteVehicle(id);
+        return ResponseEntity.ok(ApiResponseDto.success("Vehicle deleted successfully"));
+
     }
 }

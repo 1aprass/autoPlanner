@@ -1,5 +1,6 @@
 package ru.neoflex.autoplanner.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.neoflex.autoplanner.dto.AnalyticsSnapshotRequestDto;
@@ -23,6 +24,7 @@ public class AnalyticsSnapshotService {
     private final RepairTypeRepository repairTypeRepository;
     private final AnalyticsSnapshotMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<AnalyticsSnapshotResponseDto> getByUserId(Long userId) {
 
         if (userId == null) throw new IllegalArgumentException("user_id is required");
@@ -33,6 +35,7 @@ public class AnalyticsSnapshotService {
         return snapshots.stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
+    @Transactional
     public AnalyticsSnapshotResponseDto create(AnalyticsSnapshotRequestDto dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
@@ -53,6 +56,7 @@ public class AnalyticsSnapshotService {
         return mapper.toDto(repository.save(snapshot));
     }
 
+    @Transactional
     public AnalyticsSnapshotResponseDto update(Long id, AnalyticsSnapshotUpdateDto dto) {
         AnalyticsSnapshot snapshot = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Analytics snapshot not found"));
@@ -69,6 +73,7 @@ public class AnalyticsSnapshotService {
         return mapper.toDto(repository.save(snapshot));
     }
 
+    @Transactional
     public void delete(Long id) {
         AnalyticsSnapshot snapshot = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Analytics snapshot not found"));

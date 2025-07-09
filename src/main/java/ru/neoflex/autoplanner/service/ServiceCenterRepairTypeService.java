@@ -2,6 +2,7 @@ package ru.neoflex.autoplanner.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.neoflex.autoplanner.dto.ServiceCenterRepairTypeRequestDto;
 import ru.neoflex.autoplanner.dto.ServiceCenterRepairTypeResponseDto;
 import ru.neoflex.autoplanner.entity.RepairType;
@@ -26,10 +27,8 @@ public class ServiceCenterRepairTypeService {
     private final RepairTypeRepository repairTypeRepository;
     private final ServiceCenterRepairTypeMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<ServiceCenterRepairTypeResponseDto> getByServiceCenter(Long serviceCenterId) {
-        if (serviceCenterId == null) {
-            throw new IllegalArgumentException("service_center_id is required");
-        }
 
         List<ServiceCenterRepairType> entries = repository.findByServiceCenter_Id(serviceCenterId);
 
@@ -42,6 +41,7 @@ public class ServiceCenterRepairTypeService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public ServiceCenterRepairTypeResponseDto add(ServiceCenterRepairTypeRequestDto dto) {
         validateDto(dto);
 
@@ -67,6 +67,7 @@ public class ServiceCenterRepairTypeService {
         return mapper.toDto(saved);
     }
 
+    @Transactional
     public void delete(Long id) {
         ServiceCenterRepairType entity = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Service center repair type not found"));

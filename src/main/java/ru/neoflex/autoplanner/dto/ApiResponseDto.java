@@ -13,6 +13,9 @@ public class ApiResponseDto<T> {
     public static <T> ApiResponseDto<T> success(T data) {
         return new ApiResponseDto<>("success", null, data);
     }
+    public static <T> ApiResponseDto<T> success(String message) {
+        return new ApiResponseDto<>("success", message, null);
+    }
 
     public static <T> ApiResponseDto<T> success(String message, T data) {
         return new ApiResponseDto<>("success", message, data);

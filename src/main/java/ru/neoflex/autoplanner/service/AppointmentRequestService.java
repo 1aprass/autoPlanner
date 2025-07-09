@@ -2,6 +2,7 @@ package ru.neoflex.autoplanner.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.neoflex.autoplanner.dto.AppointmentRequestRequestDto;
 import ru.neoflex.autoplanner.dto.AppointmentRequestResponseDto;
 import ru.neoflex.autoplanner.dto.AppointmentRequestUpdateDto;
@@ -26,8 +27,8 @@ public class AppointmentRequestService {
     private final ServiceCenterRepository serviceCenterRepository;
     private final AppointmentRequestMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<AppointmentRequestResponseDto> getByUserId(Long userId) {
-        if (userId == null) throw new IllegalArgumentException("user_id is required");
 
         List<AppointmentRequest> list = repository.findByUserId(userId);
         if (list.isEmpty()) throw new NoSuchElementException("No appointment requests found for this user");
@@ -35,13 +36,11 @@ public class AppointmentRequestService {
         return list.stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
+    @Transactional
     public AppointmentRequestResponseDto create(AppointmentRequestRequestDto dto) {
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-        Vehicle vehicle = vehicleRepository.findById(dto.getVehicleId())
-                .orElseThrow(() -> new NoSuchElementException("Vehicle not found"));
-        ServiceCenter center = serviceCenterRepository.findById(dto.getServiceCenterId())
-                .orElseThrow(() -> new NoSuchElementException("Service center not found"));
+        User user = getUserOrThrow(dto.getUserId());
+        Vehicle vehicle = getVehicleOrThrow(dto.getVehicleId());
+        ServiceCenter center = getServiceCenterOrThrow(dto.getServiceCenterId());
 
         AppointmentRequest request = new AppointmentRequest();
         request.setUser(user);
@@ -54,9 +53,9 @@ public class AppointmentRequestService {
         return mapper.toDto(repository.save(request));
     }
 
+    @Transactional
     public AppointmentRequestResponseDto update(Long id, AppointmentRequestUpdateDto dto) {
-        AppointmentRequest request = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Appointment request not found"));
+        AppointmentRequest request = getAppointmentRequestOrThrow(id);
 
         request.setStatus(AppointmentStatus.valueOf(dto.getStatus().toUpperCase()));
         request.setComments(dto.getComment());
@@ -64,9 +63,31 @@ public class AppointmentRequestService {
         return mapper.toDto(repository.save(request));
     }
 
+    @Transactional
     public void delete(Long id) {
-        AppointmentRequest request = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Appointment request not found"));
+        AppointmentRequest request = getAppointmentRequestOrThrow(id);
         repository.delete(request);
     }
+
+
+    private User getUserOrThrow(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
+
+    private Vehicle getVehicleOrThrow(Long vehicleId) {
+        return vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new NoSuchElementException("Vehicle not found"));
+    }
+
+    private ServiceCenter getServiceCenterOrThrow(Long centerId) {
+        return serviceCenterRepository.findById(centerId)
+                .orElseThrow(() -> new NoSuchElementException("Service center not found"));
+    }
+
+    private AppointmentRequest getAppointmentRequestOrThrow(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Appointment request not found"));
+    }
 }
+

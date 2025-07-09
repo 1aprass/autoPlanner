@@ -1,5 +1,6 @@
 package ru.neoflex.autoplanner.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,45 +18,38 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserRequestDto dto){
-        try{
-            UserResponseDto responseDto = userService.createUser(dto);
-            return ResponseEntity.status(201)
-                    .body(ApiResponseDto.success("User created successfully", responseDto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<UserResponseDto>> createUser(@Valid @RequestBody UserRequestDto dto){
+
+        UserResponseDto responseDto = userService.createUser(dto);
+        return ResponseEntity.status(201)
+                .body(ApiResponseDto.success("User created successfully", responseDto));
+
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable Long id){
-        try{
-            UserResponseDto user = userService.getUser(id);
-            return ResponseEntity.ok(ApiResponseDto.success(user));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<UserResponseDto>> getUser(@Valid @PathVariable Long id){
+
+        UserResponseDto user = userService.getUser(id);
+        return ResponseEntity.ok(ApiResponseDto.success(user));
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequestDto dto){
-        try {
-            UserResponseDto user = userService.updateUser(id, dto);
-            return ResponseEntity.ok(ApiResponseDto.success("User information updated successfully", user));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<UserResponseDto>> updateUser(
+            @Valid @PathVariable Long id, @RequestBody UserUpdateRequestDto dto){
+
+        UserResponseDto user = userService.updateUser(id, dto);
+        return ResponseEntity.ok(ApiResponseDto.success("User information updated successfully", user));
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        try {
-            userService.deleteUser(id);
-            return ResponseEntity.ok(ApiResponseDto.success("User deleted successfully", null));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<String>> deleteUser(@PathVariable Long id) {
+
+        userService.deleteUser(id);
+        return ResponseEntity.ok(ApiResponseDto.success("User deleted successfully"));
+
     }
 
 }

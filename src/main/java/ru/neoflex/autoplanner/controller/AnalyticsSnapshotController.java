@@ -1,5 +1,6 @@
 package ru.neoflex.autoplanner.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -20,49 +21,36 @@ public class AnalyticsSnapshotController {
     private final AnalyticsSnapshotService service;
 
     @GetMapping
-    public ResponseEntity<?> getByUserId(@RequestParam("user_id") Long userId) {
-        try {
-            List<AnalyticsSnapshotResponseDto> result = service.getByUserId(userId);
-            return ResponseEntity.ok(ApiResponseDto.success(result));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(ApiResponseDto.error(e.getMessage()));
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<List<AnalyticsSnapshotResponseDto>>> getByUserId(@RequestParam("user_id") Long userId) {
+
+        List<AnalyticsSnapshotResponseDto> result = service.getByUserId(userId);
+        return ResponseEntity.ok(ApiResponseDto.success(result));
+
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AnalyticsSnapshotRequestDto dto) {
-        try {
-            AnalyticsSnapshotResponseDto created = service.create(dto);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponseDto.success("Analytics snapshot created successfully", created));
-        } catch (NoSuchElementException | IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.error("Invalid input"));
-        }
+    public ResponseEntity<ApiResponseDto<AnalyticsSnapshotResponseDto>> create(@Valid @RequestBody AnalyticsSnapshotRequestDto dto) {
+
+        AnalyticsSnapshotResponseDto created = service.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseDto.success("Analytics snapshot created successfully", created));
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AnalyticsSnapshotUpdateDto dto) {
-        try {
+    public ResponseEntity<ApiResponseDto<AnalyticsSnapshotResponseDto>> update(
+            @Valid @PathVariable Long id, @RequestBody AnalyticsSnapshotUpdateDto dto) {
+
             AnalyticsSnapshotResponseDto updated = service.update(id, dto);
             return ResponseEntity.ok(ApiResponseDto.success("Analytics snapshot updated successfully", updated));
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.error("Invalid input"));
-        }
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        try {
-            service.delete(id);
-            return ResponseEntity.ok(ApiResponseDto.success("Analytics snapshot deleted successfully"));
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.getMessage()));
-        }
+    public ResponseEntity<ApiResponseDto<String>> delete(@PathVariable Long id) {
+
+        service.delete(id);
+        return ResponseEntity.ok(ApiResponseDto.success("Analytics snapshot deleted successfully"));
+
     }
 }
