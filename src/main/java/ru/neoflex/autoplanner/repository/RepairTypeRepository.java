@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface RepairTypeRepository extends JpaRepository<RepairType, Long> {
-    List<RepairType> findByCategory(String category);
-    Optional<RepairType> findByName(String name);
+
+    Optional<RepairType> findById(Long Id);
 }
