@@ -36,6 +36,9 @@ public class ServiceHistory {
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Column(name="currency")
+    private String Currency;
+
     @Column(nullable = false)
     private int odometer;
 

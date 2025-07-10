@@ -37,23 +37,33 @@ public class User {
     @Column(name="created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name="role", nullable = false, updatable = false)
+    private Role role;
+
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Vehicle> vehicles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reminder> reminders;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Document> documents;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = createdAt;
+    }
+
+    public enum Role{
+        ADMIN,
+        USER,
+        SERVICE_OWNER;
+
     }
 
     @PreUpdate

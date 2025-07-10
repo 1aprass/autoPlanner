@@ -2,6 +2,7 @@ package ru.neoflex.autoplanner.dto;
 
 import lombok.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -12,4 +13,6 @@ public class ServiceCenterResponseDto {
     private String address;
     private String phone;
     private BigDecimal rating;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AnalyticsSnapshotRepository extends JpaRepository<AnalyticsSnapshot, Long> {
     List<AnalyticsSnapshot> findByUserId(Long userId);
-    Optional<AnalyticsSnapshot> findByUserIdAndYear(Long userId, Integer year);
+
 }

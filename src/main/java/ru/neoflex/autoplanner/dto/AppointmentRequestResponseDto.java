@@ -14,4 +14,6 @@ public class AppointmentRequestResponseDto {
     private LocalDateTime requestedDate;
     private String status;
     private String comment;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

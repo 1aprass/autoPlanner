@@ -7,7 +7,11 @@ import java.time.LocalDateTime;
 public class ReminderResponseDto {
     private Long id;
     private Long userId;
+    private Long vehicleId;
     private String type;
     private LocalDateTime remindDate;
-    private boolean notified;
+    private boolean isSent;
+    private String notes;
+    private int repeatIntervalDays;
+    private boolean isRecurring;
 }

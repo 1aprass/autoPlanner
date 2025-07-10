@@ -23,8 +23,8 @@ public class AnalyticsSnapshot {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private Integer year;
+    @Column(name="month", nullable = false)
+    private Integer month;
 
     @Column(name = "total_spent", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalSpent;
