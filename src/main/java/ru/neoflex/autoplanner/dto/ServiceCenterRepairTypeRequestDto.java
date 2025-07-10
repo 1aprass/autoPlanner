@@ -1,5 +1,6 @@
 package ru.neoflex.autoplanner.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -12,4 +13,10 @@ public class ServiceCenterRepairTypeRequestDto {
 
     @NotNull(message = "repairTypeId is required")
     private Long repairTypeId;
+
+    @NotNull(message = "price is required")
+    private int price;
+
+    @NotBlank(message = "currency is required")
+    private String currency;
 }

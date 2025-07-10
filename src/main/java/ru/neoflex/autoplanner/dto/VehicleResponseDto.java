@@ -18,4 +18,5 @@ public class VehicleResponseDto {
     private String licensePlate;
     private int currentOdometer;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

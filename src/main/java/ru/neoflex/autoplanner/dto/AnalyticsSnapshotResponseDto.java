@@ -3,6 +3,7 @@ package ru.neoflex.autoplanner.dto;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -10,8 +11,10 @@ import java.math.BigDecimal;
 public class AnalyticsSnapshotResponseDto {
     private Long id;
     private Long userId;
-    private Integer year;
+    private Integer month;
     private BigDecimal totalSpent;
     private Integer serviceCount;
     private Long mostCommonRepairTypeId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

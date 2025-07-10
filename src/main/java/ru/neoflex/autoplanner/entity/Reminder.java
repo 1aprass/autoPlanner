@@ -36,4 +36,10 @@ public class Reminder {
 
     @Column(columnDefinition = "TEXT")
     private String notes;
+
+    @Column(name="repeat_interval_days",nullable = false)
+    private int repeatIntervalDays;
+
+    @Column(name="is_recurring", nullable = false)
+    private boolean isRecurring;
 }

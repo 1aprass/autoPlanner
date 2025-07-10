@@ -19,4 +19,7 @@ public class UserUpdateRequestDto {
 
     @NotBlank(message = "phone is required")
     private String phone;
+
+    @NotBlank(message = "role is required")
+    private String role;
 }

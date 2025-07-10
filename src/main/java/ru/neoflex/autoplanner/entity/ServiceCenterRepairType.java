@@ -23,4 +23,10 @@ public class ServiceCenterRepairType {
     @JoinColumn(name = "repair_type_id", nullable = false)
     private RepairType repairType;
 
+    @Column(name="price", nullable = false)
+    private int price;
+
+    @Column(name="currency", nullable = false, length = 20)
+    private String currency;
+
 }

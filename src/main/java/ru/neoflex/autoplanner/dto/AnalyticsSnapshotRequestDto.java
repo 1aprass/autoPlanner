@@ -12,9 +12,9 @@ public class AnalyticsSnapshotRequestDto {
     @NotNull(message = "userId is required")
     private Long userId;
 
-    @NotNull(message = "year is required")
-    @Min(value = 1900, message = "year should be valid")
-    private Integer year;
+    @Min(value = 1, message = "month should be valid")
+    @Max(value = 12, message = "month should be valid")
+    private Integer month;
 
     @NotNull(message = "totalSpent is required")
     @DecimalMin(value = "0.0", inclusive = true, message = "totalSpent must be positive or zero")

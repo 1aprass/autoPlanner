@@ -26,6 +26,6 @@ public class UserRequestDto {
     @NotBlank(message = "phone is required")
     private String phone;
 
-    @NotBlank(message = "createdAt is required")
-    private String createdAt;
+    @NotBlank(message = "role is required")
+    private String role;
 }

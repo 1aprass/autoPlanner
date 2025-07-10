@@ -48,7 +48,7 @@ public class AnalyticsSnapshotService {
 
         AnalyticsSnapshot snapshot = new AnalyticsSnapshot();
         snapshot.setUser(user);
-        snapshot.setYear(dto.getYear());
+        snapshot.setMonth(dto.getMonth());
         snapshot.setTotalSpent(dto.getTotalSpent());
         snapshot.setServiceCount(dto.getServiceCount());
         snapshot.setMostCommonRepairType(repairType);

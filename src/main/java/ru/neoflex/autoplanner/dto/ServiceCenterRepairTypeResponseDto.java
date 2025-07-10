@@ -9,4 +9,6 @@ public class ServiceCenterRepairTypeResponseDto {
     private Long serviceCenterId;
     private Long repairTypeId;
     private String repairTypeName;
+    private int price;
+    private String currency;
 }

@@ -12,5 +12,15 @@ public class ReminderUpdateRequestDto {
     @NotNull(message = "remindDate is required")
     private LocalDateTime remindDate;
 
-    private boolean notified;
+    @NotNull(message = "isSent is required")
+    private boolean isSent;
+
+    @NotBlank(message = "notes is required")
+    private String notes;
+
+    @NotNull(message = "repeatIntervalDays is required")
+    private int repeatIntervalDays;
+
+    @NotNull(message = "isRecurring is required")
+    private boolean isRecurring;
 }
