@@ -45,14 +45,14 @@ public class Vehicle {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "vehicle")
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceHistory> serviceHistories;
 
-    @OneToMany(mappedBy = "vehicle")
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reminder> reminders;
 
-    @OneToMany(mappedBy = "vehicle")
-    private List<Document> documents;
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AppointmentRequest> appointmentRequest;
 
     @PrePersist
     protected void onCreate() {

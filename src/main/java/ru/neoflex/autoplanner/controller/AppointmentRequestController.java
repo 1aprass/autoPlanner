@@ -1,14 +1,16 @@
 package ru.neoflex.autoplanner.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import ru.neoflex.autoplanner.dto.ApiResponseDto;
-import ru.neoflex.autoplanner.dto.AppointmentRequestRequestDto;
-import ru.neoflex.autoplanner.dto.AppointmentRequestResponseDto;
-import ru.neoflex.autoplanner.dto.AppointmentRequestUpdateDto;
+import ru.neoflex.autoplanner.dto.*;
 import ru.neoflex.autoplanner.service.AppointmentRequestService;
 
 import java.util.List;
@@ -21,6 +23,17 @@ public class AppointmentRequestController {
 
     private final AppointmentRequestService service;
 
+    @Operation(summary = "Receive all user appointment requests")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "requests successfully received",
+                    content = @Content(schema = @Schema(implementation = ApiResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid data in request",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class))),
+            @ApiResponse(responseCode = "404", description = "No request found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class)))
+    })
     @GetMapping
     public ResponseEntity<ApiResponseDto<List<AppointmentRequestResponseDto>>> getByUserId(
             @RequestParam(name = "user_id") @NotNull Long userId) {
@@ -30,6 +43,17 @@ public class AppointmentRequestController {
 
     }
 
+    @Operation(summary = "Create a new appointment requests")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Request created successfully",
+                    content = @Content(schema = @Schema(implementation = ApiResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Error in request data",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class))),
+            @ApiResponse(responseCode = "404", description = "User or vehicle not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class)))
+    })
     @PostMapping
     public ResponseEntity<ApiResponseDto<AppointmentRequestResponseDto>> create(
             @Valid @RequestBody AppointmentRequestRequestDto dto) {
@@ -40,9 +64,20 @@ public class AppointmentRequestController {
 
     }
 
+    @Operation(summary = "Update appointment request")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Request updated successfully",
+                    content = @Content(schema = @Schema(implementation = ApiResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Error in request data",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class))),
+            @ApiResponse(responseCode = "404", description = "Request not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class)))
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<AppointmentRequestResponseDto>> update(@Valid @PathVariable Long id,
-                                    @RequestBody AppointmentRequestUpdateDto dto) {
+    public ResponseEntity<ApiResponseDto<AppointmentRequestResponseDto>> update(
+            @Valid @PathVariable Long id, @Valid @RequestBody AppointmentRequestUpdateDto dto) {
 
         AppointmentRequestResponseDto result = service.update(id, dto);
         return ResponseEntity.ok(ApiResponseDto
@@ -50,6 +85,15 @@ public class AppointmentRequestController {
 
     }
 
+    @Operation(summary = "Delete appointment request by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Request deleted successfully",
+                    content = @Content(schema = @Schema(implementation = ApiResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "Request not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error",
+                    content = @Content(schema = @Schema(implementation = ApiErrorDto.class)))
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDto<String>> delete(@PathVariable Long id) {
 

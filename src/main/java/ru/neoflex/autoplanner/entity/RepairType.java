@@ -32,8 +32,14 @@ public class RepairType {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "repairType")
+    @OneToMany(mappedBy = "repairType", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceHistory> serviceHistories;
+
+    @OneToMany(mappedBy = "repairType", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServiceCenterRepairType> ServiceCenterRepairType;
+
+    @OneToMany(mappedBy = "mostCommonRepairType", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnalyticsSnapshot> mostCommonRepairType;
 
     @PrePersist
     protected void onCreate() {

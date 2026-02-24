@@ -58,9 +58,11 @@ public class ServiceCenterRepairTypeService {
         RepairType repairType = repairTypeRepository.findById(dto.getRepairTypeId())
                 .orElseThrow(() -> new NoSuchElementException("Repair type not found"));
 
-        ServiceCenterRepairType entity = new ServiceCenterRepairType();
+        ServiceCenterRepairType entity = mapper.toEntity(dto);
+
         entity.setServiceCenter(serviceCenter);
         entity.setRepairType(repairType);
+
 
         ServiceCenterRepairType saved = repository.save(entity);
 
