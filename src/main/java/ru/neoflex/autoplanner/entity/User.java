@@ -51,7 +51,10 @@ public class User {
     private List<Reminder> reminders;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Document> documents;
+    private List<AppointmentRequest> appointments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnalyticsSnapshot> analyticsSnapshots;
 
     @PrePersist
     protected void onCreate() {

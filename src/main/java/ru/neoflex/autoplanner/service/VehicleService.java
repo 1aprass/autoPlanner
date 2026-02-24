@@ -57,7 +57,7 @@ public class VehicleService {
     private Vehicle getVehicleOrThrow(Long vehicleId) {
         return vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new NoSuchElementException("Vehicle not found with id: " + vehicleId));
-    }
+        }
 
     private User getUserOrThrow(Long userId) {
         return userRepository.findById(userId)

@@ -36,8 +36,14 @@ public class ServiceCenter {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "serviceCenter")
+    @OneToMany(mappedBy = "serviceCenter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceHistory> serviceHistories;
+
+    @OneToMany(mappedBy = "serviceCenter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AppointmentRequest> appointmentRequest;
+
+    @OneToMany(mappedBy = "serviceCenter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServiceCenterRepairType> services;
 
     @PrePersist
     protected void onCreate() {

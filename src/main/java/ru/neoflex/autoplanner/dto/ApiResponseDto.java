@@ -1,10 +1,12 @@
 package ru.neoflex.autoplanner.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponseDto<T> {
     private String status;
     private String message;
