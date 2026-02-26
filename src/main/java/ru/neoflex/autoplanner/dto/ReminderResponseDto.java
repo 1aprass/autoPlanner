@@ -1,9 +1,14 @@
 package ru.neoflex.autoplanner.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReminderResponseDto {
     private Long id;
     private Long userId;
