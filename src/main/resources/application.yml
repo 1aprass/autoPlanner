@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/autoplanner
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${DB_USERNAME:dasha}
+    password: ${DB_PASSWORD:483711}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -30,3 +30,4 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
